@@ -4,8 +4,6 @@ import io.github.styzf.context.javainfo.JavaInfo;
 import io.github.styzf.context.javainfo.MemberInfo;
 import io.github.styzf.context.javainfo.TypeInfo;
 
-import javax.xml.ws.soap.Addressing;
-import java.util.List;
 import java.util.Map;
 
 /**
