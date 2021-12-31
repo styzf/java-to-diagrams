@@ -80,7 +80,7 @@
 
   <properties>
     <!-- sonarcloud -->
-    <sonar.projectKey>styzf_code-parser</sonar.projectKey>
+    <sonar.projectKey>styzf_java-to-diagrams</sonar.projectKey>
     <sonar.organization>styzf</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 
