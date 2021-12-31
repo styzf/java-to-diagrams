@@ -16,7 +16,7 @@
       <AppenderRef ref="Console"/>
     </AsyncRoot>
     <!-- 屏蔽解析失败 -->
-    <AsyncLogger name="io.github.linwancen.diagrams.java.parser.Step5MethodCall" level="error" additivity="false"/>
+    <AsyncLogger name="io.github.styzf.code.parser.java.parser.MethodCallUtils" level="error" additivity="false"/>
     <!-- 避免框架打出来的系统路径混淆 -->
     <AsyncLogger name="guru.nidi.graphviz.engine.GraphvizCmdLineEngine" level="warn" additivity="false"/>
     <!-- 屏蔽框架打出来的命令 -->
