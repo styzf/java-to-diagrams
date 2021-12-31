@@ -3,7 +3,7 @@
 - 测试版，名字结构和算法可能大幅重构，若出现异常可以直接调试修改源码
 - 国外 GitHub 反馈地址：https://github.com/styzf/java-to-diagrams/issues
 - 国内 Gitee  反馈地址：https://gitee.com/styzf/java-to-diagrams/issues
-- 互联网反馈邮箱 1498425439@qq.com
+- 互联网反馈邮箱 styzfa@163.com
 
 
 ## 使用指南 USE
