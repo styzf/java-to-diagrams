@@ -1,8 +1,8 @@
 # Java 代码生成关系图 java-to-diagrams
 
 - 测试版，名字结构和算法可能大幅重构，若出现异常可以直接调试修改源码
-- 国外 GitHub 反馈地址：https://github.com/linwancen/java-to-diagrams/issues
-- 国内 Gitee  反馈地址：https://gitee.com/LinWanCen/java-to-diagrams/issues
+- 国外 GitHub 反馈地址：https://github.com/styzf/java-to-diagrams/issues
+- 国内 Gitee  反馈地址：https://gitee.com/styzf/java-to-diagrams/issues
 - 互联网反馈邮箱 1498425439@qq.com
 
 
@@ -10,18 +10,18 @@
 - IDEA 可以选中文件夹 Ctrl + Shift + C 复制路径
 
 ### 图形界面
-1. 运行 [JavaParserMain.java](src/main/java/io/github/linwancen/diagrams/JavaParserMain.java)
+1. 运行 [JavaParserMain.java](src/main/java/io/github/styzf/diagrams/JavaParserMain.java)
 
 ### 直接使用
 - **需设置 Maven 环境变量`M2_HOME`和`JAVA_HOME`并把它们的`bin`目录设置到`path`**
 - 编辑 [conf.properties](src/main/resources/conf.properties) 可以修改配置
-1. 编辑 [JavaParseMainTest.java](src/test/java/io/github/linwancen/diagrams/java/parser/JavaParseMainTest.java) 粘贴路径
+1. 编辑 [JavaParseMainTest.java](src/test/java/io/github/styzf/diagrams/java/parser/JavaParseMainTest.java) 粘贴路径
 2. 运行 JavaParseMainTest.java
 
 ### 嵌入项目
 1. 使用 `mvn install` 安装到本地
 2. 添加 `Maven` 依赖
-3. 拷贝 [JavaParseMainTest.java](src/test/java/io/github/linwancen/diagrams/java/parser/JavaParseMainTest.java) 到项目中
+3. 拷贝 [JavaParseMainTest.java](src/test/java/io/github/styzf/diagrams/java/parser/JavaParseMainTest.java) 到项目中
 4. 拷贝 [conf.properties](src/main/resources/conf.properties) 到项目中，\
    可以设置`parser_solver_auto`开头的两个选项为`false`，**大幅提升运行速度**
 5. 运行 JavaParseMainTest.java
@@ -70,12 +70,12 @@
 
 指标  | 徽章
 ---   | ---
-安全  | [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=LinWanCen_java-to-diagrams&metric=security_rating)](https://sonarcloud.io/dashboard?id=LinWanCen_java-to-diagrams)
-可维护| [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=LinWanCen_java-to-diagrams&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=LinWanCen_java-to-diagrams)
-可靠性| [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=LinWanCen_java-to-diagrams&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=LinWanCen_java-to-diagrams)
-错误  | [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=LinWanCen_java-to-diagrams&metric=bugs)](https://sonarcloud.io/dashboard?id=LinWanCen_java-to-diagrams)
-漏洞  | [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=LinWanCen_java-to-diagrams&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=LinWanCen_java-to-diagrams)
-代码行| [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=LinWanCen_java-to-diagrams&metric=ncloc)](https://sonarcloud.io/dashboard?id=LinWanCen_java-to-diagrams)
+安全  | [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=styzf_java-to-diagrams&metric=security_rating)](https://sonarcloud.io/dashboard?id=styzf_java-to-diagrams)
+可维护| [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=styzf_java-to-diagrams&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=styzf_java-to-diagrams)
+可靠性| [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=styzf_java-to-diagrams&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=styzf_java-to-diagrams)
+错误  | [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=styzf_java-to-diagrams&metric=bugs)](https://sonarcloud.io/dashboard?id=styzf_java-to-diagrams)
+漏洞  | [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=styzf_java-to-diagrams&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=styzf_java-to-diagrams)
+代码行| [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=styzf_java-to-diagrams&metric=ncloc)](https://sonarcloud.io/dashboard?id=styzf_java-to-diagrams)
 
 
 ## 效果图
