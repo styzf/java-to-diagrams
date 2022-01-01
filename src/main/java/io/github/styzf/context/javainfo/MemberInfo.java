@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -58,9 +60,10 @@ public class MemberInfo extends JavaInfo {
         if (StrUtil.isBlank(sign) || MemberEnum.isNotMethod(memberType)){
             return "";
         }
-        String param = sign.substring(sign.indexOf("("));
-        String[] methodArr = sign.substring(0, sign.indexOf("(")).split("\\.");
-        String method = methodArr[methodArr.length - 1];
-        return method + param;
+        Matcher matcher = Pattern.compile("(?!\\.)([^\\.]*?)(\\()(.*?)\\)").matcher(sign);
+        while (matcher.find()) {
+            methodName = matcher.group();
+        }
+        return methodName;
     }
 }
