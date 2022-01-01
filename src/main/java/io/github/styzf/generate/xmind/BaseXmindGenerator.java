@@ -7,12 +7,14 @@ import io.github.styzf.context.JavaContext;
 import io.github.styzf.context.ParserContext;
 import io.github.styzf.context.javainfo.MemberInfo;
 import io.github.styzf.generate.xmind.dict.XMindConstant;
+import io.github.styzf.generate.xmind.style.StyleUtil;
 import io.github.styzf.parser.java.dict.MemberEnum;
 import io.github.styzf.util.common.Conf;
 import io.github.styzf.util.common.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xmind.core.ITopic;
+import org.xmind.core.style.IStyle;
 
 import java.io.File;
 import java.util.List;
@@ -33,6 +35,8 @@ public class BaseXmindGenerator extends AbstractXmindGenerator {
     
     @Override
     public void generate(JavaContext javaContext) {
+        StyleUtil.setStyleSheet(styleSheet);
+        
         Map<String, MemberInfo> memberContext = javaContext.getMemberContext();
         String includePatternStr = Conf.PARSER_XMIND_METHOD_INCLUDE.get();
         Pattern includeMethod = Pattern.compile(includePatternStr);
@@ -80,8 +84,11 @@ public class BaseXmindGenerator extends AbstractXmindGenerator {
             if (MemberEnum.isGetSet(callInfo.memberType)) {
                 continue;
             }
-            
+    
+            IStyle style = StyleUtil.getRedBackgroundStyle();
+    
             ITopic iTopic = generateTopic(callInfo);
+            iTopic.setStyleId(style.getId());
             lastTopic.add(iTopic);
             generateCallTopic(callInfo, iTopic);
         }
@@ -89,7 +96,7 @@ public class BaseXmindGenerator extends AbstractXmindGenerator {
     
     private ITopic generateTopic(MemberInfo memberInfo) {
         ITopic topic = workbook.createTopic();
-        String text = memberInfo.commentFirst + "\n" + memberInfo.sign;
+        String text = memberInfo.getCommentFirst() + "\n" + memberInfo.classInfo.name + "." + memberInfo.name + "()";
         topic.setTitleText(text);
         return topic;
     }

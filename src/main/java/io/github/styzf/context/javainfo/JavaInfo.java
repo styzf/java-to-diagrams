@@ -1,5 +1,6 @@
 package io.github.styzf.context.javainfo;
 
+import cn.hutool.core.util.StrUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +34,7 @@ public class JavaInfo extends ModifiersInfo {
     public String lowFirstName;
     
     /** 首句注释 */
-    public String commentFirst;
+    private String commentFirst = "";
     /** 全部注释 */
     public String comment;
 
@@ -53,11 +54,11 @@ public class JavaInfo extends ModifiersInfo {
     /**
      * 截取注释第一句
      */
-    public void genCommentFirst() {
-        if (comment == null) {
-            commentFirst = "";
-            return;
+    public String getCommentFirst() {
+        if (StrUtil.isNotBlank(commentFirst) || StrUtil.isBlank(comment)) {
+            return commentFirst;
         }
+        
         Matcher matcher = COMMENT_FIRST_PATTERN.matcher(comment);
         if (matcher.find()) {
             commentFirst = matcher.group();
@@ -71,6 +72,7 @@ public class JavaInfo extends ModifiersInfo {
             }
             commentFirst = comment;
         }
+        return commentFirst;
     }
 
 }

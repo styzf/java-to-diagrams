@@ -94,7 +94,6 @@ public class InfoUtils {
         }
 
         type.getJavadoc().ifPresent(v -> classInfo.comment = v.getDescription().toText());
-        classInfo.genCommentFirst();
     }
 
     /**
@@ -107,7 +106,6 @@ public class InfoUtils {
         info.isFinal = d.isFinal();
         info.access = AccessEnumUtils.toEnum(r.accessSpecifier());
         d.getJavadoc().ifPresent(v -> info.comment = v.getDescription().toText());
-        info.genCommentFirst();
     }
 
     /**
@@ -162,7 +160,6 @@ public class InfoUtils {
 
         Optional<Javadoc> javadoc = d.getJavadoc();
         javadoc.ifPresent(v -> info.comment = v.getDescription().toText());
-        info.genCommentFirst();
 
         for (Parameter param : d.getParameters()) {
             info.paramTypes.add(param.getType().toString());
