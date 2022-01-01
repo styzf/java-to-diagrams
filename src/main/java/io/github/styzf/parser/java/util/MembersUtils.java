@@ -61,7 +61,7 @@ public class MembersUtils {
                 continue;
             }
             // TODO 这里的解析是否可以先解析出名字，然后再进行处理
-            MemberInfo member = javaContext.getMember(info.sign);
+             MemberInfo member = javaContext.getMember(info.sign);
             if (ObjectUtil.isNotNull(member)) {
                 info.usageInfo = member.usageInfo;
                 member.usageInfo.values().stream().forEach(usage -> usage.callInfo.put(info.sign, info));

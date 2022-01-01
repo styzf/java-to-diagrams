@@ -62,7 +62,7 @@ public class BaseXmindGenerator extends AbstractXmindGenerator {
     }
     
     private void addRoot(MemberInfo memberInfo) {
-        ITopic iTopic = generateTopic(memberInfo);
+        ITopic iTopic = generateTopic(memberInfo, 1);
         rootTopic.add(iTopic);
         generateCallTopic(memberInfo, iTopic);
     }
@@ -75,7 +75,8 @@ public class BaseXmindGenerator extends AbstractXmindGenerator {
             return;
         }
         // TODO 还要再加一段读取实现或者父方法的逻辑。这个在解析那边完成
-        
+    
+        int index = 1;
         for (MemberInfo callInfo : callInfoList) {
             // todo 递归循环调用处理，另外循环调用怎么处理
             if (memberInfo.equals(callInfo)) {
@@ -87,17 +88,18 @@ public class BaseXmindGenerator extends AbstractXmindGenerator {
     
             IStyle style = StyleUtil.getRedBackgroundStyle();
     
-            ITopic iTopic = generateTopic(callInfo);
+            ITopic iTopic = generateTopic(callInfo, index++);
             iTopic.setStyleId(style.getId());
             lastTopic.add(iTopic);
             generateCallTopic(callInfo, iTopic);
         }
     }
     
-    private ITopic generateTopic(MemberInfo memberInfo) {
+    private ITopic generateTopic(MemberInfo memberInfo, int index) {
         ITopic topic = workbook.createTopic();
-        String text = memberInfo.getCommentFirst() + "\n" + memberInfo.classInfo.name + "." + memberInfo.name + "()";
+        String text = index + "、" + memberInfo.getCommentFirst() + "\n" + memberInfo.classInfo.name + "." + memberInfo.name + "()";
         topic.setTitleText(text);
+        
         return topic;
     }
 }
