@@ -43,19 +43,11 @@ public enum Conf {
     @SuppressWarnings("SpellCheckingInspection")
     PARSER_SHOW_SYMBOL("parser_xmind_symbol", "true"),
 
-    /** 思维导图 根方法 包含正则 */
-    @SuppressWarnings("SpellCheckingInspection")
-    PARSER_XMIND_INCLUDE("parser_xmind_include", ""),
-
-    /** 思维导图 根方法 排除正则 */
-    @SuppressWarnings("SpellCheckingInspection")
-    PARSER_XMIND_EXCLUDE("parser_xmind_exclude", ""),
-
-    /** 思维导图 方法 包含正则 */
+    /** 思维导图 指定开始的方法 包含正则 */
     @SuppressWarnings("SpellCheckingInspection")
     PARSER_XMIND_METHOD_INCLUDE("parser_xmind_method_include", ""),
 
-    /** 思维导图 方法 排除正则 */
+    /** 思维导图 指定开始的方法 排除正则 */
     @SuppressWarnings("SpellCheckingInspection")
     PARSER_XMIND_METHOD_EXCLUDE("parser_xmind_method_exclude", "^java"),
 

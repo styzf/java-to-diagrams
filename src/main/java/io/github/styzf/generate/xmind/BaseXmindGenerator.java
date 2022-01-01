@@ -4,7 +4,6 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import io.github.styzf.context.JavaContext;
-import io.github.styzf.context.ParserContext;
 import io.github.styzf.context.javainfo.MemberInfo;
 import io.github.styzf.generate.xmind.dict.XMindConstant;
 import io.github.styzf.generate.xmind.style.StyleUtil;
