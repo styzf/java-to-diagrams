@@ -7,17 +7,13 @@ import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclarat
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import io.github.styzf.code.parser.java.api.JavaParse;
-import io.github.styzf.code.parser.java.api.dict.AccessEnum;
 import io.github.styzf.context.JavaContext;
-import io.github.styzf.context.javainfo.JavaInfo;
 import io.github.styzf.context.javainfo.MemberInfo;
 import io.github.styzf.context.javainfo.TypeInfo;
+import io.github.styzf.parser.java.dict.AccessEnum;
 import io.github.styzf.parser.java.dict.MemberEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 public class MembersUtils {
     private static final Logger LOG = LoggerFactory.getLogger(MembersUtils.class);
@@ -64,6 +60,7 @@ public class MembersUtils {
                 LOG.warn("skip: {}", m);
                 continue;
             }
+            // TODO 这里的解析是否可以先解析出名字，然后再进行处理
             MemberInfo member = javaContext.getMember(info.sign);
             if (ObjectUtil.isNotNull(member)) {
                 info.usageInfo = member.usageInfo;
@@ -73,7 +70,6 @@ public class MembersUtils {
             javaContext.add(info);
             classInfo.memberInfo.put(info.sign, info);
             MethodCallUtils.parseMethodCall(javaContext,m, classInfo, info);
-            info.genMethodName();
         }
     }
 }

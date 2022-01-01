@@ -1,5 +1,7 @@
 package io.github.styzf.parser.java;
 
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.TypeDeclaration;
@@ -9,12 +11,10 @@ import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclar
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ClassLoaderTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
-import io.github.styzf.api.FileGenerate;
 import io.github.styzf.api.FileParser;
 import io.github.styzf.context.BaseJavaContext;
 import io.github.styzf.context.JavaContext;
 import io.github.styzf.context.ParserContext;
-import io.github.styzf.context.javainfo.JavaInfo;
 import io.github.styzf.context.javainfo.TypeInfo;
 import io.github.styzf.parser.AbstractFileParser;
 import io.github.styzf.parser.java.util.InfoUtils;
@@ -38,13 +38,13 @@ import java.util.regex.Pattern;
  * @author styzf
  * @date 2021/12/15 20:51
  */
-public class JavaParser extends AbstractFileParser {
+public class JavaParserImpl extends AbstractFileParser {
     
-    private static final Logger LOG = LoggerFactory.getLogger(JavaParser.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JavaParserImpl.class);
     
     private static final CombinedTypeSolver SOLVER = new CombinedTypeSolver();
     
-    private static JavaContext JAVA_CONTEXT = new BaseJavaContext();
+    private static final JavaContext JAVA_CONTEXT = new BaseJavaContext();
     
     static {
         SOLVER.add(new ClassLoaderTypeSolver(ClassLoader.getSystemClassLoader()));
@@ -60,7 +60,7 @@ public class JavaParser extends AbstractFileParser {
     
     @Override
     public FileParser parser(File... files) {
-        FileUtils.deep(this::parseFile, this::filterFile, files);
+        FileUtils.deep(file -> parseFile(file), this::filterFile, files);
         OverUtils.parseOver(JAVA_CONTEXT);
         return this;
     }
@@ -82,6 +82,9 @@ public class JavaParser extends AbstractFileParser {
         parseText(FileUtils.read(file));
     }
     
+    /**
+     * 主解析方法
+     */
     private void parseText(String s) {
         CompilationUnit cu = StaticJavaParser.parse(s);
         // todo 类的包名，暂时不丢到info里面，应该要考虑在里面实现

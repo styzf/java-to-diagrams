@@ -1,7 +1,7 @@
 package io.github.styzf.parser.java.util;
 
 import com.github.javaparser.ast.AccessSpecifier;
-import io.github.styzf.code.parser.java.api.dict.AccessEnum;
+import io.github.styzf.parser.java.dict.AccessEnum;
 
 class AccessEnumUtils {
 

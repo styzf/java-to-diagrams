@@ -25,5 +25,8 @@ public class TypeInfo extends JavaInfo {
 //    public TypeInfo parentInfo;
     /** 继承子 */
 //    public LinkedHashMap<String, TypeInfo> childInfo = new LinkedHashMap<>();
+    /**
+     * 调用关系
+     */
     public LinkedHashMap<String, TypeInfo> relInfo = new LinkedHashMap<>();
 }

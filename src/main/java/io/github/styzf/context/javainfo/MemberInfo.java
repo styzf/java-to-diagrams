@@ -50,14 +50,17 @@ public class MemberInfo extends JavaInfo {
     /** 返回注释 */
     public String returnComment;
     /** 获取方法全名 */
-    public String methodName;
-    public void genMethodName() {
+    private String methodName;
+    public String getMethodName() {
+        if (StrUtil.isNotBlank(methodName)) {
+            return methodName;
+        }
         if (StrUtil.isBlank(sign) || MemberEnum.isNotMethod(memberType)){
-            return;
+            return "";
         }
         String param = sign.substring(sign.indexOf("("));
         String[] methodArr = sign.substring(0, sign.indexOf("(")).split("\\.");
         String method = methodArr[methodArr.length - 1];
-        methodName = method + param;
+        return method + param;
     }
 }

@@ -1,8 +1,7 @@
 package io.github.styzf.context.javainfo;
 
-import io.github.styzf.code.parser.java.api.dict.AccessEnum;
-import io.github.styzf.code.parser.java.api.dict.MemberEnum;
-import io.github.styzf.code.parser.java.api.dict.TypeEnum;
+import io.github.styzf.parser.java.dict.AccessEnum;
+import io.github.styzf.parser.java.dict.TypeEnum;
 
 /**
  * 常用修饰词

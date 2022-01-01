@@ -1,12 +1,9 @@
 package io.github.styzf.factory;
 
 import cn.hutool.core.collection.CollUtil;
-import io.github.styzf.api.FileGenerate;
 import io.github.styzf.api.FileParser;
-import io.github.styzf.dict.GeneratorFileType;
 import io.github.styzf.dict.ParserFileType;
-import io.github.styzf.generate.xmind.BaseXmindGenerator;
-import io.github.styzf.parser.java.JavaParser;
+import io.github.styzf.parser.java.JavaParserImpl;
 import io.github.styzf.util.common.Conf;
 
 import java.util.ArrayList;
@@ -24,7 +21,7 @@ public class ParserFactory {
     private static final Map<ParserFileType, FileParser> PARSER_FACTORY = new HashMap<>();
 
     static {
-        PARSER_FACTORY.put(ParserFileType.JAVA, new JavaParser());
+        PARSER_FACTORY.put(ParserFileType.JAVA, new JavaParserImpl());
     }
     
     private static final List<FileParser> PARSER_LIST = new ArrayList<>();

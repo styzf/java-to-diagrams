@@ -6,7 +6,6 @@ import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import io.github.styzf.code.parser.java.api.JavaParse;
 import io.github.styzf.context.JavaContext;
 import io.github.styzf.context.javainfo.JavaInfo;
 import io.github.styzf.context.javainfo.MemberInfo;
