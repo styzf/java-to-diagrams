@@ -1,10 +1,9 @@
 package io.github.styzf.generate.xmind;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
-import io.github.styzf.context.JavaContext;
-import io.github.styzf.context.javainfo.MemberInfo;
+import io.github.styzf.context.java.JavaContext;
+import io.github.styzf.context.java.javainfo.MemberInfo;
 import io.github.styzf.generate.xmind.dict.XMindConstant;
 import io.github.styzf.generate.xmind.style.StyleUtil;
 import io.github.styzf.parser.java.dict.MemberEnum;
@@ -16,8 +15,10 @@ import org.xmind.core.ITopic;
 import org.xmind.core.style.IStyle;
 
 import java.io.File;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -31,6 +32,9 @@ public class BaseXmindGenerator extends AbstractXmindGenerator {
     
     public final File outDir = new File(FileUtils.CLASS_PATH);
     public final String outName = "test";
+    
+    /** 循环调用判断用 */
+    public static Set<String> single = new HashSet<>();
     
     @Override
     public void generate(JavaContext javaContext) {
@@ -49,9 +53,11 @@ public class BaseXmindGenerator extends AbstractXmindGenerator {
         end();
     }
     
+    /**
+     * 结束生成思维导图
+     */
     public void end() {
         try {
-            // 后缀大小写不对会导致打开软件没打开文件
             String path = new File(outDir, outName + "." + XMindConstant.XMIND).getCanonicalPath();
             workbook.save(path);
             LOG.info("思维导图/脑图：\tfile:///{}", path.replace('\\', '/'));
@@ -60,41 +66,58 @@ public class BaseXmindGenerator extends AbstractXmindGenerator {
         }
     }
     
+    /**
+     * 添加到根目录
+     */
     private void addRoot(MemberInfo memberInfo) {
         ITopic iTopic = generateTopic(memberInfo, 1);
         rootTopic.add(iTopic);
         generateCallTopic(memberInfo, iTopic);
     }
     
+    /**
+     * 遍历循环生成被调用方Topic
+     * @param memberInfo 成员信息
+     * @param lastTopic 上一个Topic节点，传入用于设置当前成员信息生成的topic添加到上一个节点
+     */
     private void generateCallTopic(MemberInfo memberInfo, ITopic lastTopic) {
         List<MemberInfo> callInfoList = memberInfo.callInfo.values().stream()
                 .filter(callInfo -> MemberEnum.isMethod(callInfo.memberType))
                 .collect(Collectors.toList());
-        if (CollUtil.isEmpty(callInfoList)) {
-            return;
-        }
-        // TODO 还要再加一段读取实现或者父方法的逻辑。这个在解析那边完成
     
         int index = 1;
         for (MemberInfo callInfo : callInfoList) {
-            // todo 递归循环调用处理，另外循环调用怎么处理
-            if (memberInfo.equals(callInfo)) {
-                continue;
-            }
             if (MemberEnum.isGetSet(callInfo.memberType)) {
                 continue;
             }
     
             IStyle style = StyleUtil.getRedBackgroundStyle();
     
-            ITopic iTopic = generateTopic(callInfo, index++);
-            iTopic.setStyleId(style.getId());
-            lastTopic.add(iTopic);
-            generateCallTopic(callInfo, iTopic);
+            try {
+                ITopic iTopic = generateTopic(callInfo, index++);
+                iTopic.setStyleId(style.getId());
+                lastTopic.add(iTopic);
+                generateCallTopic(callInfo, iTopic);
+            } catch (RuntimeException ignored) {index--;}
         }
+        single.remove(memberInfo.sign);
     }
     
+    /**
+     * 生成ITopic
+     * @param memberInfo 成员信息
+     * @param index 索引号，用于生成调用步骤
+     * @return 生成的ITopic
+     */
     private ITopic generateTopic(MemberInfo memberInfo, int index) {
+        boolean singleFlag = single.add(memberInfo.sign);
+    
+        // TODO 定义对应的业务异常类
+        if (! singleFlag) {
+            LOG.warn("存在循环调用：{}", memberInfo.sign);
+            throw new RuntimeException("存在循环调用：" + memberInfo.sign);
+        }
+        
         ITopic topic = workbook.createTopic();
         String text = index + "、" + memberInfo.getCommentFirst() + "\n" + memberInfo.classInfo.name + "." + memberInfo.name + "()";
         topic.setTitleText(text);

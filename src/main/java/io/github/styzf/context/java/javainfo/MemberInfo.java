@@ -1,4 +1,4 @@
-package io.github.styzf.context.javainfo;
+package io.github.styzf.context.java.javainfo;
 
 import cn.hutool.core.util.StrUtil;
 import io.github.styzf.parser.java.dict.MemberEnum;

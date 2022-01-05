@@ -1,15 +1,13 @@
-package io.github.styzf.context.javainfo;
+package io.github.styzf.context.java.javainfo;
 
 import cn.hutool.core.util.StrUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 /**
  * Java解析容器
@@ -53,6 +51,7 @@ public class JavaInfo extends ModifiersInfo {
 
     /**
      * 截取注释第一句
+     * TODO 如果当前类没有注释，尝试使用实现或者接口的注释
      */
     public String getCommentFirst() {
         if (StrUtil.isNotBlank(commentFirst) || StrUtil.isBlank(comment)) {

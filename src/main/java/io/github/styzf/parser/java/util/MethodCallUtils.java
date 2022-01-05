@@ -2,19 +2,15 @@ package io.github.styzf.parser.java.util;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.github.javaparser.ast.body.BodyDeclaration;
-import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import io.github.styzf.context.JavaContext;
-import io.github.styzf.context.javainfo.JavaInfo;
-import io.github.styzf.context.javainfo.MemberInfo;
-import io.github.styzf.context.javainfo.TypeInfo;
+import io.github.styzf.context.java.JavaContext;
+import io.github.styzf.context.java.javainfo.MemberInfo;
+import io.github.styzf.context.java.javainfo.TypeInfo;
 import io.github.styzf.parser.java.dict.MemberEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 /**
  * 解析方法调用工具类

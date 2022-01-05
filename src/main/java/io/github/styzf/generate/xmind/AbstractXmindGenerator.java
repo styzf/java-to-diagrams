@@ -1,8 +1,7 @@
 package io.github.styzf.generate.xmind;
 
 import io.github.styzf.api.FileGenerate;
-import io.github.styzf.context.JavaContext;
-import io.github.styzf.context.javainfo.JavaInfo;
+import io.github.styzf.context.java.JavaContext;
 import org.xmind.core.*;
 import org.xmind.core.style.IStyleSheet;
 

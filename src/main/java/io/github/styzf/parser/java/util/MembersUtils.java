@@ -7,9 +7,9 @@ import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclarat
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import io.github.styzf.context.JavaContext;
-import io.github.styzf.context.javainfo.MemberInfo;
-import io.github.styzf.context.javainfo.TypeInfo;
+import io.github.styzf.context.java.JavaContext;
+import io.github.styzf.context.java.javainfo.MemberInfo;
+import io.github.styzf.context.java.javainfo.TypeInfo;
 import io.github.styzf.parser.java.dict.AccessEnum;
 import io.github.styzf.parser.java.dict.MemberEnum;
 import org.slf4j.Logger;

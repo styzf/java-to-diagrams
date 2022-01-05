@@ -10,10 +10,10 @@ import com.github.javaparser.resolution.declarations.ResolvedMethodLikeDeclarati
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnnotationDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserMethodDeclaration;
-import io.github.styzf.context.JavaContext;
-import io.github.styzf.context.javainfo.JavaInfo;
-import io.github.styzf.context.javainfo.MemberInfo;
-import io.github.styzf.context.javainfo.TypeInfo;
+import io.github.styzf.context.java.JavaContext;
+import io.github.styzf.context.java.javainfo.JavaInfo;
+import io.github.styzf.context.java.javainfo.MemberInfo;
+import io.github.styzf.context.java.javainfo.TypeInfo;
 import io.github.styzf.parser.java.dict.AccessEnum;
 import io.github.styzf.parser.java.dict.MemberEnum;
 import io.github.styzf.parser.java.dict.TypeEnum;

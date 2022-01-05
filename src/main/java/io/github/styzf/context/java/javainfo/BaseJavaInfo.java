@@ -1,4 +1,4 @@
-package io.github.styzf.context.javainfo;
+package io.github.styzf.context.java.javainfo;
 
 /**
  * 基础java信息

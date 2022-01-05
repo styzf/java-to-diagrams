@@ -1,12 +1,10 @@
-package io.github.styzf.context;
+package io.github.styzf.context.java;
 
-import io.github.styzf.context.javainfo.JavaInfo;
-import io.github.styzf.context.javainfo.MemberInfo;
-import io.github.styzf.context.javainfo.TypeInfo;
+import io.github.styzf.context.java.javainfo.JavaInfo;
+import io.github.styzf.context.java.javainfo.MemberInfo;
+import io.github.styzf.context.java.javainfo.TypeInfo;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,11 +24,6 @@ public class BaseJavaContext implements JavaContext {
      */
     private static final Map<String, MemberInfo> MEMBER_CONTEXT = new HashMap<>();
     
-    /**
-     * 继承或者实现链路容器
-     */
-    private static final Map<String, List<JavaInfo>> EXTENDS_CONTEXT = new HashMap<>();
-    
     @Override
     public void add(JavaInfo javaInfo) {
         CONTEXT.put(javaInfo.sign, javaInfo);
@@ -45,12 +38,7 @@ public class BaseJavaContext implements JavaContext {
     
     @Override
     public JavaInfo get(String key) {
-        throw new RuntimeException("暂不支持");
-    }
-    
-    @Override
-    public Map<String, JavaInfo> getAll() {
-        return CONTEXT;
+        return CONTEXT.get(key);
     }
     
     @Override
@@ -66,5 +54,12 @@ public class BaseJavaContext implements JavaContext {
     @Override
     public Map<String, MemberInfo> getMemberContext() {
         return MEMBER_CONTEXT;
+    }
+    
+    @Override
+    public JavaInfo remove(String key) {
+        CLASS_CONTEXT.remove(key);
+        MEMBER_CONTEXT.remove(key);
+        return CONTEXT.remove(key);
     }
 }

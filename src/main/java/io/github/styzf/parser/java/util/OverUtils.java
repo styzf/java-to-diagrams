@@ -3,18 +3,12 @@ package io.github.styzf.parser.java.util;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.github.javaparser.ast.AccessSpecifier;
-import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
-import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
-import com.github.javaparser.resolution.types.ResolvedType;
-import io.github.styzf.context.JavaContext;
-import io.github.styzf.context.javainfo.JavaInfo;
-import io.github.styzf.context.javainfo.MemberInfo;
-import io.github.styzf.context.javainfo.TypeInfo;
+import io.github.styzf.context.java.JavaContext;
+import io.github.styzf.context.java.javainfo.MemberInfo;
+import io.github.styzf.context.java.javainfo.TypeInfo;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,6 +25,9 @@ public class OverUtils {
                 .forEach(parent -> parseOver(javaContext, classInfo, type, parent));
     }
     
+    /**
+     * 解析重写方法
+     */
     private static void parseOver(JavaContext javaContext, TypeInfo classInfo,
                                   TypeDeclaration<?> type, ResolvedReferenceType parent) {
         TypeInfo typeInfo = InfoUtils.getTypeInfo(javaContext, parent.getTypeDeclaration().get());
@@ -41,8 +38,7 @@ public class OverUtils {
     }
     
     /**
-     * 最终处理调用链路问题
-     * @param javaContext
+     * 接口与抽象、实现，调用关系关联
      */
     public static void parseOver(JavaContext javaContext) {
         List<MemberInfo> notCallInfoList = javaContext.getMemberContext().values().stream()

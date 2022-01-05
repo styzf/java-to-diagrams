@@ -1,7 +1,5 @@
 package io.github.styzf.parser.java;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.TypeDeclaration;
@@ -12,10 +10,11 @@ import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ClassLoaderTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import io.github.styzf.api.FileParser;
-import io.github.styzf.context.BaseJavaContext;
-import io.github.styzf.context.JavaContext;
+import io.github.styzf.context.java.BaseJavaContext;
+import io.github.styzf.context.java.JavaContext;
 import io.github.styzf.context.ParserContext;
-import io.github.styzf.context.javainfo.TypeInfo;
+import io.github.styzf.context.java.LruJavaContext;
+import io.github.styzf.context.java.javainfo.TypeInfo;
 import io.github.styzf.parser.AbstractFileParser;
 import io.github.styzf.parser.java.util.InfoUtils;
 import io.github.styzf.parser.java.util.MembersUtils;
@@ -44,7 +43,7 @@ public class JavaParserImpl extends AbstractFileParser {
     
     private static final CombinedTypeSolver SOLVER = new CombinedTypeSolver();
     
-    private static final JavaContext JAVA_CONTEXT = new BaseJavaContext();
+    private static final JavaContext JAVA_CONTEXT = new LruJavaContext(new BaseJavaContext());
     
     static {
         SOLVER.add(new ClassLoaderTypeSolver(ClassLoader.getSystemClassLoader()));
