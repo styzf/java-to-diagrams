@@ -5,6 +5,8 @@ import io.github.styzf.context.java.javainfo.JavaInfo;
 import io.github.styzf.context.java.javainfo.MemberInfo;
 import io.github.styzf.context.java.javainfo.TypeInfo;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Map;
 
 /**

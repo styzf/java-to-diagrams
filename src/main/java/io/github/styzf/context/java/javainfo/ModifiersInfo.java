@@ -3,6 +3,8 @@ package io.github.styzf.context.java.javainfo;
 import io.github.styzf.parser.java.dict.AccessEnum;
 import io.github.styzf.parser.java.dict.TypeEnum;
 
+import java.io.Serializable;
+
 /**
  * 常用修饰词
  * <br/>按谷歌顺序排列
@@ -10,7 +12,7 @@ import io.github.styzf.parser.java.dict.TypeEnum;
  * @author styzf
  * @date 2021/12/15 20:15
  */
-public class ModifiersInfo {
+public class ModifiersInfo implements Serializable {
     /** 可见性 */
     public AccessEnum access;
 

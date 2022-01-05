@@ -30,7 +30,7 @@ public class BaseXmindGenerator extends AbstractXmindGenerator {
     
     private static final Logger LOG = LoggerFactory.getLogger(BaseXmindGenerator.class);
     
-    public final File outDir = new File(FileUtils.CLASS_PATH);
+    public final File outDir = FileUtils.getClassPathFile();
     public final String outName = "test";
     
     /** 循环调用判断用 */

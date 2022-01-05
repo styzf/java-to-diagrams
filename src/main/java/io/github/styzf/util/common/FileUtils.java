@@ -28,6 +28,10 @@ public class FileUtils {
         }
         CLASS_PATH = path;
     }
+    
+    public static File getClassPathFile() {
+        return new File(FileUtils.CLASS_PATH);
+    }
 
     public static String read(File file) {
         byte[] bytes;
