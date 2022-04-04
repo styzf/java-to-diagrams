@@ -3,9 +3,6 @@ package io.github.styzf.parser.java;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.TypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedInterfaceDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ClassLoaderTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
@@ -13,12 +10,9 @@ import io.github.styzf.api.FileParser;
 import io.github.styzf.context.java.BaseJavaContext;
 import io.github.styzf.context.java.JavaContext;
 import io.github.styzf.context.ParserContext;
-import io.github.styzf.context.java.LruJavaContext;
-import io.github.styzf.context.java.javainfo.TypeInfo;
 import io.github.styzf.parser.AbstractFileParser;
-import io.github.styzf.parser.java.util.InfoUtils;
-import io.github.styzf.parser.java.util.MembersUtils;
-import io.github.styzf.parser.java.util.OverUtils;
+import io.github.styzf.parser.java.resolver.OverResolver;
+import io.github.styzf.parser.java.resolver.TypeResolver;
 import io.github.styzf.util.common.Conf;
 import io.github.styzf.util.common.FileUtils;
 import io.github.styzf.util.common.FilterUtils;
@@ -43,7 +37,7 @@ public class JavaParserImpl extends AbstractFileParser {
     
     private static final CombinedTypeSolver SOLVER = new CombinedTypeSolver();
     
-    private static final JavaContext JAVA_CONTEXT = new LruJavaContext(new BaseJavaContext());
+    private static final JavaContext JAVA_CONTEXT = new BaseJavaContext();
     
     static {
         SOLVER.add(new ClassLoaderTypeSolver(ClassLoader.getSystemClassLoader()));
@@ -60,15 +54,12 @@ public class JavaParserImpl extends AbstractFileParser {
     @Override
     public FileParser parser(File... files) {
         FileUtils.deep(file -> parseFile(file), this::filterFile, files);
-        OverUtils.parseOver(JAVA_CONTEXT);
+        OverResolver.parseOver(JAVA_CONTEXT);
         return this;
     }
     
     /**
      * 过滤文件
-     *
-     * @param file
-     * @return
      */
     private boolean filterFile(File file) {
         Pattern includePath = Pattern.compile(Conf.PARSER_PATH_INCLUDE.get());
@@ -97,23 +88,7 @@ public class JavaParserImpl extends AbstractFileParser {
             if (type.isAnnotationDeclaration()) {
                 continue;
             }
-//            classInfo.packNames = packNames;
-            ResolvedReferenceTypeDeclaration rt = type.resolve();
-            TypeInfo classInfo = InfoUtils.getTypeInfo(JAVA_CONTEXT, rt, type);
-    
-            MembersUtils.parseMembers(JAVA_CONTEXT, classInfo, type, rt);
-            if (!type.isClassOrInterfaceDeclaration()) {
-                continue;
-            }
-            if (rt.isClass()) {
-                ResolvedClassDeclaration rcd = rt.asClass();
-                OverUtils.parseOver(JAVA_CONTEXT, classInfo, type, rcd.getAllInterfaces());
-                OverUtils.parseOver(JAVA_CONTEXT, classInfo, type, rcd.getAllSuperClasses());
-            }
-            if (rt.isInterface()) {
-                ResolvedInterfaceDeclaration rid = rt.asInterface();
-                OverUtils.parseOver(JAVA_CONTEXT, classInfo, type, rid.getAllInterfacesExtended());
-            }
+            TypeResolver.parserType(type, JAVA_CONTEXT);
         }
     }
     

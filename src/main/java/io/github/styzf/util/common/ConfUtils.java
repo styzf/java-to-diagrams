@@ -14,7 +14,10 @@ public class ConfUtils {
     private static final Logger LOG = LoggerFactory.getLogger(ConfUtils.class);
 
     private ConfUtils() {}
-
+    
+    /**
+     * 加载配置
+     */
     public static Properties loadUtf8(String path) {
         return loadUtf8(new File(FileUtils.CLASS_PATH, path));
     }

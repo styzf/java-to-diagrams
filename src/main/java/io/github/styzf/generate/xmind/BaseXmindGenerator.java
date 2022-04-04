@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author styzf
@@ -44,12 +45,18 @@ public class BaseXmindGenerator extends AbstractXmindGenerator {
         String includePatternStr = Conf.PARSER_XMIND_METHOD_INCLUDE.get();
         Pattern includeMethod = Pattern.compile(includePatternStr);
         boolean notIncludePattern = StrUtil.isBlank(includePatternStr);
-        
-        memberContext.values().stream()
-                .filter(memberInfo -> (notIncludePattern && MapUtil.isEmpty(memberInfo.usageInfo))
-                        || includeMethod.matcher(memberInfo.sign).find())
-                .filter(memberInfo -> MemberEnum.isMethod(memberInfo.memberType))
-                .forEach(this::addRoot);
+    
+        Stream<MemberInfo> stream = memberContext.values().stream();
+        if (notIncludePattern) {
+            stream = stream
+                    .filter(memberInfo -> MapUtil.isEmpty(memberInfo.usageInfo))
+                    .filter(memberInfo -> MemberEnum.isMethod(memberInfo.memberType));
+        } else {
+            stream = stream
+                    .filter(memberInfo -> includeMethod.matcher(memberInfo.sign).find())
+                    .filter(memberInfo -> MemberEnum.isMethod(memberInfo.memberType));
+        }
+        stream.forEach(this::addRoot);
         end();
     }
     

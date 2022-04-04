@@ -1,4 +1,4 @@
-package io.github.styzf.parser.java.util;
+package io.github.styzf.parser.java.resolver;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -12,11 +12,12 @@ import io.github.styzf.context.java.javainfo.MemberInfo;
 import io.github.styzf.context.java.javainfo.TypeInfo;
 import io.github.styzf.parser.java.dict.AccessEnum;
 import io.github.styzf.parser.java.dict.MemberEnum;
+import io.github.styzf.parser.java.util.InfoUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class MembersUtils {
-    private static final Logger LOG = LoggerFactory.getLogger(MembersUtils.class);
+public class MembersResolver {
+    private static final Logger LOG = LoggerFactory.getLogger(MembersResolver.class);
 
     /**
      * 解析成员
@@ -55,6 +56,10 @@ public class MembersUtils {
                 info.isStatic = d.isStatic();
                 info.access = AccessEnum.NONE;
 //                javaParses.forEach(v -> v.member(info));
+//            } else if (m.isTypeDeclaration()) {
+//                // 回到类解析循环调用，这里是为啥？
+//                TypeUtil.parserType(m.asTypeDeclaration(), javaContext);
+//                continue;
             } else {
                 // TODO 这个会导致成员没有添加到类里面去
                 LOG.warn("skip: {}", m);
@@ -69,7 +74,7 @@ public class MembersUtils {
             
             javaContext.add(info);
             classInfo.memberInfo.put(info.sign, info);
-            MethodCallUtils.parseMethodCall(javaContext,m, classInfo, info);
+            MethodCallResolver.parseMethodCall(javaContext,m, classInfo, info);
         }
     }
 }
