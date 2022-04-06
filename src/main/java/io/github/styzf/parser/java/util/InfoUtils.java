@@ -1,6 +1,7 @@
 package io.github.styzf.parser.java.util;
 
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.JavadocBlockTag;
@@ -115,7 +116,12 @@ public class InfoUtils {
      */
     public static void addMethodInfo(MemberInfo info, ResolvedMethodLikeDeclaration r, CallableDeclaration<?> d) {
         // https://github.com/nidi3/graphviz-java/issues/172
-        info.sign = r.getQualifiedSignature().replace(" extends java.lang.Object", "");
+        if (StrUtil.isNotBlank(r.getQualifiedSignature())) {
+            info.sign = r.getQualifiedSignature().replace(" extends java.lang.Object", "");
+        } else {
+            info.sign = r.getClassName() + r.getName();
+        }
+        
         info.name = r.getName();
         info.genLowFirstName();
         if (r instanceof JavaParserMethodDeclaration) {
