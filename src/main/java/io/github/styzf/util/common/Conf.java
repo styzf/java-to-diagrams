@@ -16,7 +16,9 @@ import java.util.Properties;
 public enum Conf {
 
     // region 解析路径
-
+    /** pom路径 */
+    POM_PATH("pom_path", null),
+    
     /** 解析路径 ;: 分隔 */
     PARSER_PATH("parser_path", null),
 

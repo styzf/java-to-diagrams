@@ -11,6 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.function.Consumer;
+import java.util.regex.Pattern;
 
 public class FileUtils {
     static final Logger LOG = LoggerFactory.getLogger(FileUtils.class);
@@ -27,6 +28,12 @@ public class FileUtils {
         } catch (Exception ignored) {
         }
         CLASS_PATH = path;
+    }
+    
+    public static final Pattern PATH_PATTERN = Pattern.compile("[" + File.pathSeparator + "\r\n]+");
+    
+    public static String[] split(String paths) {
+        return PATH_PATTERN.split(paths);
     }
     
     public static File getClassPathFile() {

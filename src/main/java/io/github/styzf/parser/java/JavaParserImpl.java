@@ -13,6 +13,7 @@ import io.github.styzf.context.ParserContext;
 import io.github.styzf.parser.AbstractFileParser;
 import io.github.styzf.parser.java.resolver.OverResolver;
 import io.github.styzf.parser.java.resolver.TypeResolver;
+import io.github.styzf.parser.java.util.SolverUtils;
 import io.github.styzf.util.common.Conf;
 import io.github.styzf.util.common.FileUtils;
 import io.github.styzf.util.common.FilterUtils;
@@ -21,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -43,6 +45,13 @@ public class JavaParserImpl extends AbstractFileParser {
         SOLVER.add(new ClassLoaderTypeSolver(ClassLoader.getSystemClassLoader()));
         JavaSymbolSolver symbolSolver = new JavaSymbolSolver(SOLVER);
         StaticJavaParser.getConfiguration().setSymbolResolver(symbolSolver);
+    }
+    
+    @Override
+    public FileParser setArgs() {
+        String pomPath = Conf.POM_PATH.get();
+        SolverUtils.addSolverMavenJars(SOLVER, new File(pomPath), new HashSet<String>(), new HashSet<String>());
+        return super.setArgs();
     }
     
     @Override

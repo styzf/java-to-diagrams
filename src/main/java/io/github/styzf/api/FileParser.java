@@ -12,18 +12,22 @@ import java.util.List;
  * @date 2021/12/15 20:15
  */
 public interface FileParser {
-    
     /**
-     * 设置生成器
-     * @param parserContext
-     * @return
+     * 设置参数
      */
-    FileParser setParserContext(ParserContext parserContext);
+    default FileParser setArgs() {
+        return this;
+    }
     
     /**
      * 设置生成器
-     * @param generateList
-     * @return
+     */
+    default FileParser setParserContext(ParserContext parserContext) {
+        return this;
+    }
+    
+    /**
+     * 设置生成器
      */
     FileParser setFileGenerate(List<FileGenerate> generateList);
     

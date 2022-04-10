@@ -44,6 +44,7 @@ public class AutoGenerator {
         List<FileParser> fileParsers = ParserFactory.get();
         fileParsers.forEach(fileParser -> fileParser
                 .setParserContext(null)
+                .setArgs()
                 .setFileGenerate(GeneratorFactory.get())
                 .parser(files)
                 .end());
