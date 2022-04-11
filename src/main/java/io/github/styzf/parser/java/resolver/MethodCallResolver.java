@@ -9,6 +9,8 @@ import com.github.javaparser.ast.expr.MethodReferenceExpr;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionMethodDeclaration;
+import com.sun.javadoc.MethodDoc;
+import com.sun.tools.javadoc.MethodDocImpl;
 import io.github.styzf.context.java.JavaContext;
 import io.github.styzf.context.java.javainfo.MemberInfo;
 import io.github.styzf.context.java.javainfo.TypeInfo;
@@ -21,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -94,7 +97,10 @@ class MethodCallResolver {
             Field methodField = r.getClass().getDeclaredField("method");
             methodField.setAccessible(true);
             Method method = (Method) methodField.get(r);
-            callInfo.comment = JavaDocUtils.methodDoc(method).getRawCommentText();
+            MethodDoc methodDoc = JavaDocUtils.methodDoc(method);
+            if (ObjectUtil.isNotNull(methodDoc)) {
+                callInfo.comment = methodDoc.getRawCommentText();
+            }
         } catch (Exception ignored) {}
         
         MemberInfo member = javaContext.getMember(callInfo.sign);
