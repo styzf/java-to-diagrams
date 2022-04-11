@@ -112,9 +112,9 @@ public class InfoUtils {
     /**
      * 补充方法信息
      *
-     * @param d nullable
+     * @param callableDeclaration nullable
      */
-    public static void addMethodInfo(MemberInfo info, ResolvedMethodLikeDeclaration r, CallableDeclaration<?> d) {
+    public static void addMethodInfo(MemberInfo info, ResolvedMethodLikeDeclaration r, CallableDeclaration<?> callableDeclaration) {
         // https://github.com/nidi3/graphviz-java/issues/172
         if (StrUtil.isNotBlank(r.getQualifiedSignature())) {
             info.sign = r.getQualifiedSignature().replace(" extends java.lang.Object", "");
@@ -135,12 +135,12 @@ public class InfoUtils {
         } else {
             info.access = AccessEnumUtils.toEnum(r.accessSpecifier());
         }
-        if (d == null) {
+        if (callableDeclaration == null) {
             return;
         }
-        info.isFinal = d.isFinal();
+        info.isFinal = callableDeclaration.isFinal();
         // TODO 测试是否相同
-        AccessEnum accessEnum = AccessEnumUtils.toEnum(d.getAccessSpecifier());
+        AccessEnum accessEnum = AccessEnumUtils.toEnum(callableDeclaration.getAccessSpecifier());
         if (info.access != accessEnum) {
             // 修正接口方法默认共有
             if (TypeEnum.INTERFACE.equals(info.classInfo.type)) {
@@ -150,24 +150,24 @@ public class InfoUtils {
                 info.access = accessEnum;
             }
         }
-        if (info.isStatic != d.isStatic()) {
-            LOG.warn("isStatic {} != {} in {}", info.isStatic, d.isStatic(), info.sign);
-            info.isStatic = d.isStatic();
+        if (info.isStatic != callableDeclaration.isStatic()) {
+            LOG.warn("isStatic {} != {} in {}", info.isStatic, callableDeclaration.isStatic(), info.sign);
+            info.isStatic = callableDeclaration.isStatic();
         }
-        if (info.isAbstract != d.isAbstract()) {
+        if (info.isAbstract != callableDeclaration.isAbstract()) {
             // 修正接口方法默认抽象
             if (TypeEnum.INTERFACE.equals(info.classInfo.type)) {
                 info.isAbstract = true;
             } else {
-                LOG.warn("isAbstract {} != {} in {}", info.isAbstract, d.isAbstract(), info.sign);
-                info.isAbstract = d.isAbstract();
+                LOG.warn("isAbstract {} != {} in {}", info.isAbstract, callableDeclaration.isAbstract(), info.sign);
+                info.isAbstract = callableDeclaration.isAbstract();
             }
         }
 
-        Optional<Javadoc> javadoc = d.getJavadoc();
+        Optional<Javadoc> javadoc = callableDeclaration.getJavadoc();
         javadoc.ifPresent(v -> info.comment = v.getDescription().toText());
 
-        for (Parameter param : d.getParameters()) {
+        for (Parameter param : callableDeclaration.getParameters()) {
             info.paramTypes.add(param.getType().toString());
             String name = param.getName().toString();
             info.paramNames.add(name);
@@ -181,8 +181,8 @@ public class InfoUtils {
                 info.paramComments.add("");
             }
         }
-        if (d.isMethodDeclaration()) {
-            MethodDeclaration rmd = d.asMethodDeclaration();
+        if (callableDeclaration.isMethodDeclaration()) {
+            MethodDeclaration rmd = callableDeclaration.asMethodDeclaration();
             info.returnType = rmd.getType().asString();
             javadoc.ifPresent(v -> info.returnComment = TagComment.from(v, JavadocBlockTag.Type.RETURN, null));
         }

@@ -48,6 +48,7 @@ public class OverResolver {
                     .forEach(cMemberInfo -> {
                         String classMethodName = cMemberInfo.name;
                         typeInfo.memberInfo.values().forEach(iMemberInfo -> {
+           
                             if (iMemberInfo.name.equals(classMethodName)) {
                                 iMemberInfo.callInfo.put(cMemberInfo.sign, cMemberInfo);
                                 cMemberInfo.usageInfo.put(iMemberInfo.sign, iMemberInfo);

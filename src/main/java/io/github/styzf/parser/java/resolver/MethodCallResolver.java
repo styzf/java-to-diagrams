@@ -8,14 +8,18 @@ import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.MethodReferenceExpr;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionMethodDeclaration;
 import io.github.styzf.context.java.JavaContext;
 import io.github.styzf.context.java.javainfo.MemberInfo;
 import io.github.styzf.context.java.javainfo.TypeInfo;
 import io.github.styzf.parser.java.dict.MemberEnum;
 import io.github.styzf.parser.java.util.InfoUtils;
+import io.github.styzf.parser.java.util.JavaDocUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -86,6 +90,12 @@ class MethodCallResolver {
         ResolvedReferenceTypeDeclaration rt = r.declaringType();
         callInfo.classInfo = InfoUtils.getTypeInfo(javaContext, rt);
         InfoUtils.addMethodInfo(callInfo, r, null);
+        try {
+            Field methodField = r.getClass().getDeclaredField("method");
+            methodField.setAccessible(true);
+            Method method = (Method) methodField.get(r);
+            callInfo.comment = JavaDocUtils.methodDoc(method).getRawCommentText();
+        } catch (Exception ignored) {}
         
         MemberInfo member = javaContext.getMember(callInfo.sign);
         if (ObjectUtil.isNotNull(member)) {
