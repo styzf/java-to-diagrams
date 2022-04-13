@@ -65,7 +65,6 @@ public class SolverUtils {
         LOG.info("get Maven Dep success, use {}ms", useTime);
 
         if (dep != null) {
-            LOG.info("addSolverJars\t{}", dep);
             addSolverJars(solver, dep, addJars);
         }
     }
