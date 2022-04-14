@@ -1,6 +1,7 @@
 package io.github.styzf.parser.java.util;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.StrUtil;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
@@ -77,6 +78,12 @@ public class SolverUtils {
     static void addSolverJars(CombinedTypeSolver solver, String pathToJars, Set<String> addJars) {
         String[] pathToJarArr = FileUtils.split(pathToJars);
         for (String pathToJar : pathToJarArr) {
+            if (StrUtil.isBlank(pathToJar)) {
+                continue;
+            }
+            if (pathToJar.startsWith("null")) {
+                pathToJar = pathToJar.replace("null", "");
+            }
             if (File.separatorChar == '\\') {
                 pathToJar = pathToJar.replace('/', '\\');
             }
