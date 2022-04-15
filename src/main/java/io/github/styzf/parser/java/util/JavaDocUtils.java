@@ -107,12 +107,7 @@ public class JavaDocUtils {
         String unZipPath = srcUnZipRoot + '/' + filePath;
         File file = new File(unZipPath);
         File parentFile = file.getParentFile();
-        if (parentFile != null) {
-            boolean mkdirs = parentFile.mkdirs();
-            if (!mkdirs) {
-                LOG.warn("mkdirs fail: {}", parentFile.getAbsolutePath());
-            }
-        }
+        
         try {
             Files.write(file.toPath(), text.getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {

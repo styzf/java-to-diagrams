@@ -56,10 +56,9 @@ public class MembersResolver {
                 info.isStatic = d.isStatic();
                 info.access = AccessEnum.NONE;
 //                javaParses.forEach(v -> v.member(info));
-//            } else if (m.isTypeDeclaration()) {
-//                // 回到类解析循环调用，这里是为啥？
-//                TypeUtil.parserType(m.asTypeDeclaration(), javaContext);
-//                continue;
+            } else if (m.isTypeDeclaration()) {
+                TypeResolver.parserType(m.asTypeDeclaration(), javaContext);
+                continue;
             } else {
                 // TODO 这个会导致成员没有添加到类里面去
                 LOG.warn("skip: {}", m);

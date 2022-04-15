@@ -62,7 +62,7 @@ public class JavaParserImpl extends AbstractFileParser {
     
     @Override
     public FileParser parser(File... files) {
-        FileUtils.deep(file -> parseFile(file), this::filterFile, files);
+        FileUtils.deep(this::parseFile, this::filterFile, files);
         OverResolver.parseOver(JAVA_CONTEXT);
         return this;
     }
@@ -77,7 +77,6 @@ public class JavaParserImpl extends AbstractFileParser {
     }
     
     private void parseFile(File file) {
-        LOG.info("parseFile\tfile:///{}", FileUtils.canonicalPath(file));
         parseText(FileUtils.read(file));
     }
     
