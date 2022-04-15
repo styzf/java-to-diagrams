@@ -15,3 +15,4 @@
 漏洞  | [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=styzf_java-to-diagrams&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=styzf_java-to-diagrams)
 代码行| [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=styzf_java-to-diagrams&metric=ncloc)](https://sonarcloud.io/dashboard?id=styzf_java-to-diagrams)
 
+![xmind.png](xmind.png)
