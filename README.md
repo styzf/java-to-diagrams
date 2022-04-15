@@ -80,6 +80,5 @@
 
 ## 效果图
 
-![xmind-demo.png](xmind-demo.png)
+![xmind.png](xmind.png)
 
-![graphviz-dot-demo.png](graphviz-dot-demo.png)
