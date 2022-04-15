@@ -73,7 +73,9 @@ public class MembersResolver {
             
             javaContext.add(info);
             classInfo.memberInfo.put(info.sign, info);
-            MethodCallResolver.parseMethodCall(javaContext,m, classInfo, info);
+            if (MemberEnum.isMethod(info.memberType)) {
+                MethodCallResolver.parseMethodCall(javaContext, m, classInfo, info);
+            }
         }
     }
 }
