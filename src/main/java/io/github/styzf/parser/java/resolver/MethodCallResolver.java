@@ -1,39 +1,31 @@
 package io.github.styzf.parser.java.resolver;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.MethodReferenceExpr;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionMethodDeclaration;
 import com.sun.javadoc.MethodDoc;
-import com.sun.tools.javadoc.MethodDocImpl;
 import io.github.styzf.context.java.JavaContext;
 import io.github.styzf.context.java.javainfo.MemberInfo;
 import io.github.styzf.context.java.javainfo.TypeInfo;
 import io.github.styzf.parser.java.dict.MemberEnum;
 import io.github.styzf.parser.java.util.InfoUtils;
 import io.github.styzf.parser.java.util.JavaDocUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
  * 解析方法调用工具类
  * <br/>独立出来便于阅读和单独控制解析失败日志
  */
+@Slf4j
 class MethodCallResolver {
-
-    private static final Logger LOG = LoggerFactory.getLogger(MethodCallResolver.class);
-
     private MethodCallResolver() {}
 
     /**
@@ -59,7 +51,7 @@ class MethodCallResolver {
                 try {
                     parseMethodCall(javaContext, classInfo, info, expr.asMethodReferenceExpr().resolve());
                 } catch (Exception e) {
-                    LOG.warn("resolve fail:\n  {}.{}({}.java:1) -> {}\n  {}",
+                    log.warn("resolve fail:\n  {}.{}({}.java:1) -> {}\n  {}",
                             classInfo.sign, info.name, classInfo.name, expr.toString(),
                             e.getLocalizedMessage());
                 }
@@ -78,7 +70,7 @@ class MethodCallResolver {
             parseMethodCall(javaContext, classInfo, info, methodCallExpr.resolve());
             return true;
         } catch (Exception e) {
-            LOG.warn("resolve fail:\n  {}.{}({}.java:1) -> {}\n  {}",
+            log.warn("resolve fail:\n  {}.{}({}.java:1) -> {}\n  {}",
                     classInfo.sign, info.name, classInfo.name, expr.asMethodCallExpr().getNameAsString(),
                     e.getLocalizedMessage());
         }

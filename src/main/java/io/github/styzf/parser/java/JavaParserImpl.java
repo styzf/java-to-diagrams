@@ -7,9 +7,9 @@ import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ClassLoaderTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import io.github.styzf.api.FileParser;
+import io.github.styzf.context.ParserContext;
 import io.github.styzf.context.java.BaseJavaContext;
 import io.github.styzf.context.java.JavaContext;
-import io.github.styzf.context.ParserContext;
 import io.github.styzf.parser.AbstractFileParser;
 import io.github.styzf.parser.java.resolver.OverResolver;
 import io.github.styzf.parser.java.resolver.TypeResolver;
@@ -17,8 +17,7 @@ import io.github.styzf.parser.java.util.SolverUtils;
 import io.github.styzf.util.common.Conf;
 import io.github.styzf.util.common.FileUtils;
 import io.github.styzf.util.common.FilterUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -33,10 +32,8 @@ import java.util.regex.Pattern;
  * @author styzf
  * @date 2021/12/15 20:51
  */
+@Slf4j
 public class JavaParserImpl extends AbstractFileParser {
-    
-    private static final Logger LOG = LoggerFactory.getLogger(JavaParserImpl.class);
-    
     private static final CombinedTypeSolver SOLVER = new CombinedTypeSolver();
     
     private static final JavaContext JAVA_CONTEXT = new BaseJavaContext();
@@ -85,19 +82,7 @@ public class JavaParserImpl extends AbstractFileParser {
      */
     private void parseText(String s) {
         CompilationUnit cu = StaticJavaParser.parse(s);
-        // todo 类的包名，暂时不丢到info里面，应该要考虑在里面实现
-        List<String> packNames = new ArrayList<>();
-        cu.getPackageDeclaration().ifPresent(e -> e.getChildNodes().get(0).stream()
-                .map(Objects::toString)
-                .forEach(packNames::add));
-        // todo 实现解析包注释
-        // StaticJavaParser.parseJavadoc(cu.getComment().get().getContent()).getDescription().toText();
-        for (TypeDeclaration<?> type : cu.getTypes()) {
-            if (type.isAnnotationDeclaration()) {
-                continue;
-            }
-            TypeResolver.parserType(type, JAVA_CONTEXT);
-        }
+        TypeResolver.parserType(cu, JAVA_CONTEXT);
     }
     
 }

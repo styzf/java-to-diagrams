@@ -15,11 +15,6 @@ public class BaseJavaContext implements JavaContext {
     private static final Map<String, JavaInfo> CONTEXT = new HashMap<>();
     
     /**
-     * 类、接口、抽象类、枚举容器
-     */
-    private static final Map<String, TypeInfo> CLASS_CONTEXT = new HashMap<>();
-    
-    /**
      * 成员容器
      */
     private static final Map<String, MemberInfo> MEMBER_CONTEXT = new HashMap<>();
@@ -27,10 +22,6 @@ public class BaseJavaContext implements JavaContext {
     @Override
     public void add(JavaInfo javaInfo) {
         CONTEXT.put(javaInfo.sign, javaInfo);
-        if (javaInfo instanceof TypeInfo) {
-            CLASS_CONTEXT.put(javaInfo.sign, (TypeInfo) javaInfo);
-            return;
-        }
         if (javaInfo instanceof MemberInfo) {
             MEMBER_CONTEXT.put(javaInfo.sign, (MemberInfo) javaInfo);
         }
@@ -43,7 +34,11 @@ public class BaseJavaContext implements JavaContext {
     
     @Override
     public TypeInfo getType(String key) {
-        return CLASS_CONTEXT.get(key);
+        JavaInfo javaInfo = CONTEXT.get(key);
+        if (javaInfo instanceof TypeInfo) {
+            return (TypeInfo) javaInfo;
+        }
+        return null;
     }
     
     @Override
@@ -58,7 +53,6 @@ public class BaseJavaContext implements JavaContext {
     
     @Override
     public JavaInfo remove(String key) {
-        CLASS_CONTEXT.remove(key);
         MEMBER_CONTEXT.remove(key);
         return CONTEXT.remove(key);
     }

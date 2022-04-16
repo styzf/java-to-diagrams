@@ -1,11 +1,12 @@
 package io.github.styzf.context.java.javainfo;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,13 +15,21 @@ import java.util.regex.Pattern;
  * @author styzf
  * @date 2021/12/15 20:15
  */
+@EqualsAndHashCode(callSuper = true)
+@Slf4j
+@Data
 public class JavaInfo extends ModifiersInfo {
-    private static final Logger LOG = LoggerFactory.getLogger(JavaInfo.class);
     private static final Pattern COMMENT_FIRST_PATTERN = Pattern.compile(
             "^[^\\r\\n]*(?:[.;]\\s|[\\r\\n]|$|.)");
     
-    /** 包名 */
-    public List<String> packNames = new ArrayList<>();
+    /**
+     * 包名
+     */
+    private String packName;
+    /**
+     * 引入的包
+     */
+    private final Map<String, Set<String>> importMap = new HashMap<>();
     /** 包注释 */
     public List<String> packComments = new ArrayList<>();
 
@@ -41,7 +50,38 @@ public class JavaInfo extends ModifiersInfo {
 
     /** 类 */
     public TypeInfo classInfo;
-
+    
+    /**
+     * 获取导入包
+     */
+    public Set<String> getImportSet(String key) {
+        return importMap.get(key);
+    }
+    
+    /**
+     * 批量添加导入包
+     */
+    public void putImportSet(Set<String> set) {
+        set.forEach(this::putImportMap);
+    }
+    
+    /**
+     * 添加导入包
+     */
+    public void putImportMap(String importStr) {
+        String importName = importStr.substring(importStr.lastIndexOf("."));
+        Set<String> set = importMap.get(importName);
+        boolean notSameName = false;
+        if (CollUtil.isEmpty(set)) {
+            set = new HashSet<>();
+            notSameName = true;
+        }
+        set.add(importStr);
+        if (notSameName) {
+            importMap.put(importName, set);
+        }
+    }
+    
     /**
      * 生成首字母小写简称
      */
@@ -64,10 +104,10 @@ public class JavaInfo extends ModifiersInfo {
         } else {
             if (classInfo != null) {
                 // 方法
-                LOG.warn("commentGenFirst fail:\n{}.{}({}.java:1) \n{}", classInfo.sign, name, classInfo.name, comment);
+                log.warn("commentGenFirst fail:\n{}.{}({}.java:1) \n{}", classInfo.sign, name, classInfo.name, comment);
             } else {
                 // 类
-                LOG.warn("commentGenFirst fail:\n{}({}.java:1) \n{}", sign, name, comment);
+                log.warn("commentGenFirst fail:\n{}({}.java:1) \n{}", sign, name, comment);
             }
             commentFirst = comment;
         }

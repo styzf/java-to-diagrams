@@ -13,12 +13,10 @@ import io.github.styzf.context.java.javainfo.TypeInfo;
 import io.github.styzf.parser.java.dict.AccessEnum;
 import io.github.styzf.parser.java.dict.MemberEnum;
 import io.github.styzf.parser.java.util.InfoUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class MembersResolver {
-    private static final Logger LOG = LoggerFactory.getLogger(MembersResolver.class);
-
     /**
      * 解析成员
      */
@@ -56,12 +54,12 @@ public class MembersResolver {
                 info.isStatic = d.isStatic();
                 info.access = AccessEnum.NONE;
 //                javaParses.forEach(v -> v.member(info));
-            } else if (m.isTypeDeclaration()) {
-                TypeResolver.parserType(m.asTypeDeclaration(), javaContext);
-                continue;
+//            } else if (m.isTypeDeclaration()) {
+//                TypeResolver.parserType(m.asTypeDeclaration(), javaContext);
+//                continue;
             } else {
                 // TODO 这个会导致成员没有添加到类里面去
-                LOG.warn("skip: {}", m);
+                log.warn("skip: {}", m);
                 continue;
             }
             // TODO 这里的解析是否可以先解析出名字，然后再进行处理
@@ -73,9 +71,16 @@ public class MembersResolver {
             
             javaContext.add(info);
             classInfo.memberInfo.put(info.sign, info);
-            if (MemberEnum.isMethod(info.memberType)) {
-                MethodCallResolver.parseMethodCall(javaContext, m, classInfo, info);
-            }
+            parserCall(javaContext, classInfo, m, info);
+        }
+    }
+    
+    /**
+     * 解析调用方
+     */
+    private static void parserCall(JavaContext javaContext, TypeInfo classInfo, BodyDeclaration<?> m, MemberInfo info) {
+        if (MemberEnum.isMethod(info.memberType)) {
+            MethodCallResolver.parseMethodCall(javaContext, m, classInfo, info);
         }
     }
 }
