@@ -37,10 +37,10 @@ public class InfoUtils {
         String name = rt.getName();
     
         TypeInfo classInfo = javaContext.getType(sign);
+        boolean needAddContext = false;
         if (ObjectUtil.isNull(classInfo)) {
             classInfo = new TypeInfo();
-        } else {
-            return classInfo;
+            needAddContext = true;
         }
         
         if (rt.isEnum()) {
@@ -61,7 +61,9 @@ public class InfoUtils {
             classInfo.access = AccessEnumUtils.toEnum(((HasAccessSpecifier) rt).accessSpecifier());
         }
         
-        javaContext.add(classInfo);
+        if (needAddContext) {
+            javaContext.add(classInfo);
+        }
         return classInfo;
     }
     

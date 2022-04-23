@@ -36,20 +36,20 @@ public class OverResolver {
     public static void parseOver(TypeDeclaration<?> type, ResolvedReferenceTypeDeclaration rt,
                                  TypeInfo classInfo, JavaContext javaContext) {
 //        try {
-        if (type.isClassOrInterfaceDeclaration()) {
-            if (rt.isClass()) {
-                ResolvedClassDeclaration rcd = rt.asClass();
-                parseOver(javaContext, classInfo, type, rcd.getAllInterfaces());
-                parseOver(javaContext, classInfo, type, rcd.getAllSuperClasses());
-            }
-            if (rt.isInterface()) {
-                ResolvedInterfaceDeclaration rid = rt.asInterface();
-                parseOver(javaContext, classInfo, type, rid.getAllInterfacesExtended());
-            }
-        }
+//        if (type.isClassOrInterfaceDeclaration()) {
+//            if (rt.isClass()) {
+//                ResolvedClassDeclaration rcd = rt.asClass();
+//                parseOver(javaContext, classInfo, type, rcd.getAllInterfaces());
+//                parseOver(javaContext, classInfo, type, rcd.getAllSuperClasses());
+//            }
+//            if (rt.isInterface()) {
+//                ResolvedInterfaceDeclaration rid = rt.asInterface();
+//                parseOver(javaContext, classInfo, type, rid.getAllInterfacesExtended());
+//            }
+//        }
 //        } catch (Exception e) {
 //            log.error("over解析失败：{},{}", classInfo.sign, e.getMessage());
-//            StaticOverResolver.parseOver(javaContext, classInfo,type);
+        StaticOverResolver.parseOver(javaContext, classInfo, rt,type);
 //        }
     }
     

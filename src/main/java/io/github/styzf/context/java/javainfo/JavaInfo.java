@@ -69,7 +69,7 @@ public class JavaInfo extends ModifiersInfo {
      * 添加导入包
      */
     public void putImportMap(String importStr) {
-        String importName = importStr.substring(importStr.lastIndexOf("."));
+        String importName = importStr.substring(importStr.lastIndexOf(".") + 1);
         Set<String> set = importMap.get(importName);
         boolean notSameName = false;
         if (CollUtil.isEmpty(set)) {
