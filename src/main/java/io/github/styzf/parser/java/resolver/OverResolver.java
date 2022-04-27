@@ -111,16 +111,14 @@ public class OverResolver {
                 .forEach(cMemberInfo -> {
                     String classMethodName = cMemberInfo.sign;
     
-                    classInfo.relInfo.entrySet().forEach(typeInfoEntry -> {
-                        typeInfoEntry.getValue().memberInfo.values().stream()
-                                .filter(iMemberInfo -> MemberEnum.isMethod(iMemberInfo.memberType))
-                                .forEach(iMemberInfo -> {
-                                    if (iMemberInfo.sign.equals(classMethodName)) {
-                                        iMemberInfo.callInfo.put(cMemberInfo.sign, cMemberInfo);
-                                        cMemberInfo.usageInfo.put(iMemberInfo.sign, iMemberInfo);
-                                    }
-                                });
-                    });
+                    classInfo.relInfo.forEach((key, value) -> value.memberInfo.values().stream()
+                            .filter(iMemberInfo -> MemberEnum.isMethod(iMemberInfo.memberType))
+                            .forEach(iMemberInfo -> {
+                                if (iMemberInfo.sign.equals(classMethodName)) {
+                                    iMemberInfo.callInfo.put(cMemberInfo.sign, cMemberInfo);
+                                    cMemberInfo.usageInfo.put(iMemberInfo.sign, iMemberInfo);
+                                }
+                            }));
                 });
     }
 }
