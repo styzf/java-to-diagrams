@@ -2,7 +2,6 @@ package io.github.styzf.parser.java;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ClassLoaderTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
@@ -11,7 +10,7 @@ import io.github.styzf.context.ParserContext;
 import io.github.styzf.context.java.BaseJavaContext;
 import io.github.styzf.context.java.JavaContext;
 import io.github.styzf.parser.AbstractFileParser;
-import io.github.styzf.parser.java.resolver.OverResolver;
+import io.github.styzf.parser.java.resolver.StaticOverResolver;
 import io.github.styzf.parser.java.resolver.TypeResolver;
 import io.github.styzf.parser.java.util.SolverUtils;
 import io.github.styzf.util.common.Conf;
@@ -20,10 +19,7 @@ import io.github.styzf.util.common.FilterUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
@@ -60,7 +56,7 @@ public class JavaParserImpl extends AbstractFileParser {
     @Override
     public FileParser parser(File... files) {
         FileUtils.deep(this::parseFile, this::filterFile, files);
-        OverResolver.parseOver(JAVA_CONTEXT);
+        StaticOverResolver.parseOver(JAVA_CONTEXT);
         return this;
     }
     

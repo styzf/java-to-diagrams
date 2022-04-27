@@ -43,9 +43,9 @@ public class TypeResolver {
             classInfo.putImportSet(importNameSet);
             classInfo.setPackName(packName);
     
-            OverResolver.parseOver(type, rt, classInfo, javaContext);
+            StaticOverResolver.parseOver(javaContext, classInfo, rt,type);
             MembersResolver.parseMembers(javaContext, classInfo, type, rt);
-            OverResolver.parseRel();
+            StaticOverResolver.parseRel();
         }
     }
 }

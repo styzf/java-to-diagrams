@@ -27,7 +27,9 @@ import java.util.stream.Collectors;
  * @author styzf
  */
 @Slf4j
-public class StaticOverResolver extends OverResolver {
+public class StaticOverResolver {
+    public static final Set<TypeInfo> HAS_REL_CLASS = new HashSet<>();
+    
     /**
      * 静态解析重写方法
      */
@@ -113,5 +115,50 @@ public class StaticOverResolver extends OverResolver {
             entry.getValue().relInfo.put(classInfo.sign, classInfo);
         }
         HAS_REL_CLASS.add(classInfo);
+    }
+    
+    /**
+     * 接口与抽象、实现，调用关系关联
+     */
+    public static void parseOver(JavaContext javaContext) {
+        List<MemberInfo> notCallInfoList = javaContext.getMemberContext().values().stream()
+                .filter(memberInfo -> CollUtil.isEmpty(memberInfo.callInfo))
+                .filter(memberInfo -> CollUtil.isNotEmpty(memberInfo.classInfo.relInfo)).collect(Collectors.toList());
+        for (MemberInfo memberInfo : notCallInfoList) {
+            MemberInfo relMemInfo = memberInfo.classInfo.relInfo.values().stream()
+                    .flatMap(relType -> relType.memberInfo.values().stream())
+                    .filter(relMem -> relMem.getMethodName().equals(memberInfo.getMethodName())
+                            && StrUtil.isNotBlank(relMem.getMethodName()))
+                    .filter(relMem -> CollUtil.isNotEmpty(relMem.callInfo))
+                    .max((o1, o2) -> o2.callInfo.size() - o1.callInfo.size()).orElse(null);
+            if (ObjectUtil.isNull(relMemInfo)) {
+                continue;
+            }
+            relMemInfo.usageInfo.put(memberInfo.sign, memberInfo);
+            memberInfo.callInfo.put(relMemInfo.sign, relMemInfo);
+        }
+    }
+    
+    public static void parseRel() {
+        HAS_REL_CLASS.forEach(StaticOverResolver::parseRel);
+    }
+    
+    private static void parseRel(TypeInfo classInfo) {
+        // 实现方法挂载，形成链路
+        LinkedHashMap<String, MemberInfo> memberInfoList = classInfo.memberInfo;
+        memberInfoList.values().stream()
+                .filter(iMemberInfo -> MemberEnum.isMethod(iMemberInfo.memberType))
+                .forEach(cMemberInfo -> {
+                    String classMethodName = cMemberInfo.sign;
+                    
+                    classInfo.relInfo.forEach((key, value) -> value.memberInfo.values().stream()
+                            .filter(iMemberInfo -> MemberEnum.isMethod(iMemberInfo.memberType))
+                            .forEach(iMemberInfo -> {
+                                if (iMemberInfo.sign.equals(classMethodName)) {
+                                    iMemberInfo.callInfo.put(cMemberInfo.sign, cMemberInfo);
+                                    cMemberInfo.usageInfo.put(iMemberInfo.sign, iMemberInfo);
+                                }
+                            }));
+                });
     }
 }
