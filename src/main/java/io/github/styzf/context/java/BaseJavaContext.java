@@ -1,5 +1,6 @@
 package io.github.styzf.context.java;
 
+import io.github.styzf.constant.GlobalConstant;
 import io.github.styzf.context.java.javainfo.JavaInfo;
 import io.github.styzf.context.java.javainfo.MemberInfo;
 import io.github.styzf.context.java.javainfo.TypeInfo;
@@ -21,19 +22,38 @@ public class BaseJavaContext implements JavaContext {
     
     @Override
     public void add(JavaInfo javaInfo) {
+        removeGenerics(javaInfo);
+    
         CONTEXT.put(javaInfo.sign, javaInfo);
         if (javaInfo instanceof MemberInfo) {
             MEMBER_CONTEXT.put(javaInfo.sign, (MemberInfo) javaInfo);
         }
     }
     
+    private void removeGenerics(JavaInfo javaInfo) {
+        javaInfo.sign = removeGenerics(javaInfo.sign);
+    }
+    
+    private String removeGenerics(String sign) {
+        if (sign == null) {
+            return null;
+        }
+        // 去除泛型
+        while (GlobalConstant.GENERICS_PATTERN.matcher(sign).find()) {
+            sign = GlobalConstant.GENERICS_PATTERN.matcher(sign).replaceFirst("");
+        }
+        return sign;
+    }
+    
     @Override
     public JavaInfo get(String key) {
+        key = removeGenerics(key);
         return CONTEXT.get(key);
     }
     
     @Override
     public TypeInfo getType(String key) {
+        key = removeGenerics(key);
         JavaInfo javaInfo = CONTEXT.get(key);
         if (javaInfo instanceof TypeInfo) {
             return (TypeInfo) javaInfo;
@@ -43,6 +63,7 @@ public class BaseJavaContext implements JavaContext {
     
     @Override
     public MemberInfo getMember(String key) {
+        key = removeGenerics(key);
         return MEMBER_CONTEXT.get(key);
     }
     
@@ -53,6 +74,7 @@ public class BaseJavaContext implements JavaContext {
     
     @Override
     public JavaInfo remove(String key) {
+        key = removeGenerics(key);
         MEMBER_CONTEXT.remove(key);
         return CONTEXT.remove(key);
     }

@@ -7,6 +7,7 @@ import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclarat
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import io.github.styzf.constant.GlobalConstant;
 import io.github.styzf.context.java.JavaContext;
 import io.github.styzf.context.java.javainfo.MemberInfo;
 import io.github.styzf.context.java.javainfo.TypeInfo;
@@ -62,8 +63,9 @@ public class MembersResolver {
                 log.warn("skip: {}", m);
                 continue;
             }
+            
             // TODO 这里的解析是否可以先解析出名字，然后再进行处理
-             MemberInfo member = javaContext.getMember(info.sign);
+            MemberInfo member = javaContext.getMember(info.sign);
             if (ObjectUtil.isNotNull(member)) {
                 info.usageInfo = member.usageInfo;
                 member.usageInfo.values().stream().forEach(usage -> usage.callInfo.put(info.sign, info));

@@ -11,6 +11,7 @@ import com.github.javaparser.resolution.declarations.ResolvedMethodLikeDeclarati
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnnotationDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserMethodDeclaration;
+import io.github.styzf.constant.GlobalConstant;
 import io.github.styzf.context.java.JavaContext;
 import io.github.styzf.context.java.javainfo.JavaInfo;
 import io.github.styzf.context.java.javainfo.MemberInfo;

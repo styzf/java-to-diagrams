@@ -1,5 +1,7 @@
 package io.github.styzf.context.java.javainfo;
 
+import lombok.EqualsAndHashCode;
+
 import java.util.LinkedHashMap;
 
 /**

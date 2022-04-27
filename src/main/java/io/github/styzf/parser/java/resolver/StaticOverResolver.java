@@ -9,6 +9,7 @@ import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedInterfaceDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import io.github.styzf.constant.GlobalConstant;
 import io.github.styzf.context.java.JavaContext;
 import io.github.styzf.context.java.javainfo.MemberInfo;
 import io.github.styzf.context.java.javainfo.TypeInfo;
@@ -29,13 +30,7 @@ import java.util.stream.Collectors;
  * @author styzf
  */
 @Slf4j
-public class StaticOverResolver {
-    private final static Pattern GENERICS_PATTERN = Pattern.compile("<[^<]*?>");
-    private final static String EXTENDS = "extends";
-    private final static String IMPLEMENTS = "implements";
-    private final static String EMPTY_STR = "";
-    private final static String SPACE = " ";
-    
+public class StaticOverResolver extends OverResolver {
     /**
      * 静态解析重写方法
      */
@@ -53,18 +48,18 @@ public class StaticOverResolver {
             fullName = type.toString().substring(type.toString().indexOf(" interface "), type.toString().indexOf("{"));
         }
         // 去除泛型
-        while (GENERICS_PATTERN.matcher(fullName).find()) {
-            fullName = GENERICS_PATTERN.matcher(fullName).replaceFirst("");
+        while (GlobalConstant.GENERICS_PATTERN.matcher(fullName).find()) {
+            fullName = GlobalConstant.GENERICS_PATTERN.matcher(fullName).replaceFirst("");
         }
         
-        if (!fullName.contains(EXTENDS) && !fullName.contains(IMPLEMENTS)) {
+        if (!fullName.contains(GlobalConstant.EXTENDS) && !fullName.contains(GlobalConstant.IMPLEMENTS)) {
             return;
         }
     
-        fullName = fullName.replaceAll(EXTENDS, EMPTY_STR);
-        fullName = fullName.replaceAll(IMPLEMENTS, EMPTY_STR);
+        fullName = fullName.replaceAll(GlobalConstant.EXTENDS, GlobalConstant.EMPTY_STR);
+        fullName = fullName.replaceAll(GlobalConstant.IMPLEMENTS, GlobalConstant.EMPTY_STR);
     
-        String[] parentArr = fullName.split(SPACE);
+        String[] parentArr = fullName.split(GlobalConstant.SPACE);
         if (parentArr.length <= 3) {
             return;
         }
@@ -82,7 +77,7 @@ public class StaticOverResolver {
                     Class.forName(sign);
                     addRel(javaContext, classInfo, parentName, sign);
                 } catch (ClassNotFoundException e) {
-                    log.error("无法解析到对应的继承关系：{}  parentName:{}" ,classInfo.sign , parentName);
+                    log.error("无法解析到对应的继承关系：" + classInfo.sign + " parentName:" + parentName);
                 }
             } else {
                 importSet.forEach(sign -> {
@@ -113,5 +108,6 @@ public class StaticOverResolver {
         classInfo.relInfo.put(classInfo.sign, classInfo);
         relInfo.relInfo.put(relInfo.sign, relInfo);
         relInfo.relInfo.put(classInfo.sign, classInfo);
+        HAS_REL_CLASS.add(classInfo);
     }
 }
