@@ -17,10 +17,7 @@ import io.github.styzf.parser.java.dict.MemberEnum;
 import io.github.styzf.parser.java.util.InfoUtils;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -106,8 +103,15 @@ public class StaticOverResolver extends OverResolver {
         
         classInfo.relInfo.put(relInfo.sign, relInfo);
         classInfo.relInfo.put(classInfo.sign, classInfo);
+        for (Map.Entry<String, TypeInfo> entry: classInfo.relInfo.entrySet()) {
+            entry.getValue().relInfo.put(relInfo.sign, relInfo);
+        }
+        
         relInfo.relInfo.put(relInfo.sign, relInfo);
         relInfo.relInfo.put(classInfo.sign, classInfo);
+        for (Map.Entry<String, TypeInfo> entry: relInfo.relInfo.entrySet()) {
+            entry.getValue().relInfo.put(classInfo.sign, classInfo);
+        }
         HAS_REL_CLASS.add(classInfo);
     }
 }

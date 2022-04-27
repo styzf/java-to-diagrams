@@ -109,13 +109,13 @@ public class OverResolver {
         memberInfoList.values().stream()
                 .filter(iMemberInfo -> MemberEnum.isMethod(iMemberInfo.memberType))
                 .forEach(cMemberInfo -> {
-                    String classMethodName = cMemberInfo.name;
+                    String classMethodName = cMemberInfo.sign;
     
                     classInfo.relInfo.entrySet().forEach(typeInfoEntry -> {
                         typeInfoEntry.getValue().memberInfo.values().stream()
                                 .filter(iMemberInfo -> MemberEnum.isMethod(iMemberInfo.memberType))
                                 .forEach(iMemberInfo -> {
-                                    if (iMemberInfo.name.equals(classMethodName)) {
+                                    if (iMemberInfo.sign.equals(classMethodName)) {
                                         iMemberInfo.callInfo.put(cMemberInfo.sign, cMemberInfo);
                                         cMemberInfo.usageInfo.put(iMemberInfo.sign, iMemberInfo);
                                     }
