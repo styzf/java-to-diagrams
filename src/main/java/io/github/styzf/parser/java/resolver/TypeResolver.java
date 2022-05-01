@@ -33,7 +33,7 @@ public class TypeResolver {
                 .map(ImportDeclaration::getNameAsString).collect(Collectors.toSet());
     
         // todo 实现解析包注释
-        // StaticJavaParser.parseJavadoc(cu.getComment().get().getContent()).getDescription().toText();
+//         StaticJavaParser.parseJavadoc(cu.getComment().get().getContent()).getDescription().toText();
         for (TypeDeclaration<?> type : cu.getTypes()) {
             if (type.isAnnotationDeclaration()) {
                 continue;
@@ -41,11 +41,11 @@ public class TypeResolver {
             ResolvedReferenceTypeDeclaration rt = type.resolve();
             TypeInfo classInfo = InfoUtils.getTypeInfo(javaContext, rt, type);
             classInfo.putImportSet(importNameSet);
+            // todo 这个包可能会没有
             classInfo.setPackName(packName);
     
             StaticOverResolver.parseOver(javaContext, classInfo, rt,type);
             MembersResolver.parseMembers(javaContext, classInfo, type, rt);
-            StaticOverResolver.parseRel();
         }
     }
 }

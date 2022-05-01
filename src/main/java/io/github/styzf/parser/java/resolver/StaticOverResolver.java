@@ -1,24 +1,23 @@
 package io.github.styzf.parser.java.resolver;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.github.javaparser.ast.body.TypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedInterfaceDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import io.github.styzf.constant.GlobalConstant;
 import io.github.styzf.context.java.JavaContext;
 import io.github.styzf.context.java.javainfo.MemberInfo;
 import io.github.styzf.context.java.javainfo.TypeInfo;
 import io.github.styzf.parser.java.dict.MemberEnum;
-import io.github.styzf.parser.java.util.InfoUtils;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.*;
-import java.util.regex.Pattern;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -68,6 +67,7 @@ public class StaticOverResolver {
         parentList = parentList.subList(2, parentList.size());
     
         parentList.forEach(parentName -> {
+            // TODO 引入带*的情况没有考虑进去
             Set<String> importSet = classInfo.getImportSet(parentName);
             if (CollUtil.isEmpty(importSet)) {
                 String packName = classInfo.getPackName();

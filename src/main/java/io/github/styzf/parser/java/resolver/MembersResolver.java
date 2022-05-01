@@ -7,7 +7,6 @@ import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclarat
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import io.github.styzf.constant.GlobalConstant;
 import io.github.styzf.context.java.JavaContext;
 import io.github.styzf.context.java.javainfo.MemberInfo;
 import io.github.styzf.context.java.javainfo.TypeInfo;
@@ -16,6 +15,8 @@ import io.github.styzf.parser.java.dict.MemberEnum;
 import io.github.styzf.parser.java.util.InfoUtils;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
+
 @Slf4j
 public class MembersResolver {
     /**
@@ -23,64 +24,71 @@ public class MembersResolver {
      */
     public static void parseMembers(JavaContext javaContext, TypeInfo classInfo, TypeDeclaration<?> type,
                                     ResolvedReferenceTypeDeclaration rt) {
-        for (BodyDeclaration<?> m : type.getMembers()) {
-            MemberInfo info = BeanUtil.copyProperties(classInfo, MemberInfo.class);
-            info.classInfo = classInfo;
+        List<FieldDeclaration> fieldList = type.findAll(FieldDeclaration.class);
+        for (FieldDeclaration f : fieldList) {
+            MemberInfo info = initInfo(classInfo);
+            info.memberType = MemberEnum.FIELD;
+            ResolvedFieldDeclaration r = f.resolve();
+            info.sign = classInfo.sign + r.getName();
+            InfoUtils.addFieldInfo(info, r, f);
+    
+            parserCall(javaContext, classInfo, f, info);
+        }
+        List<ConstructorDeclaration> constructorList = type.findAll(ConstructorDeclaration.class);
+        for (ConstructorDeclaration c :constructorList) {
+            MemberInfo info = initInfo(classInfo);
+            info.memberType = MemberEnum.CONSTRUCTOR;
+            ResolvedConstructorDeclaration r = c.resolve();
+            InfoUtils.addMethodInfo(info, r, c);
+    
+            parserCall(javaContext, classInfo, c, info);
+        }
+        List<InitializerDeclaration> initializerList = type.findAll(InitializerDeclaration.class);
+        for (InitializerDeclaration i :initializerList) {
+            MemberInfo info = initInfo(classInfo);
+            info.memberType = MemberEnum.STATIC;
+            info.sign = classInfo.sign + "_static";
+            info.name = classInfo.name + "_static";
+            info.isStatic = i.isStatic();
+            info.access = AccessEnum.NONE;
             
-            if (m.isMethodDeclaration()) {
-                info.memberType = MemberEnum.METHOD;
-                MethodDeclaration d = m.asMethodDeclaration();
-                ResolvedMethodDeclaration r = d.resolve();
-                InfoUtils.addMethodInfo(info, r, d);
-                InfoUtils.forGetSet(info, type, rt);
-//                javaParses.forEach(v -> v.member(info));
-            } else if (m.isConstructorDeclaration()) {
-                info.memberType = MemberEnum.CONSTRUCTOR;
-                ConstructorDeclaration d = m.asConstructorDeclaration();
-                ResolvedConstructorDeclaration r = d.resolve();
-                InfoUtils.addMethodInfo(info, r, d);
-//                javaParses.forEach(v -> v.member(info));
-            } else if (m.isFieldDeclaration()) {
-                info.memberType = MemberEnum.FIELD;
-                FieldDeclaration d = m.asFieldDeclaration();
-                ResolvedFieldDeclaration r = d.resolve();
-                info.sign = classInfo.sign + r.getName();
-                InfoUtils.addFieldInfo(info, r, d);
-//                javaParses.forEach(v -> v.member(info));
-            } else if (m.isInitializerDeclaration()) {
-                info.memberType = MemberEnum.STATIC;
-                InitializerDeclaration d = m.asInitializerDeclaration();
-                info.sign = classInfo.sign + "_static";
-                info.name = classInfo.name + "_static";
-                info.isStatic = d.isStatic();
-                info.access = AccessEnum.NONE;
-//                javaParses.forEach(v -> v.member(info));
-//            } else if (m.isTypeDeclaration()) {
-//                TypeResolver.parserType(m.asTypeDeclaration(), javaContext);
-//                continue;
-            } else {
-                // TODO 这个会导致成员没有添加到类里面去
-                log.warn("skip: {}", m);
-                continue;
-            }
-            
-            // TODO 这里的解析是否可以先解析出名字，然后再进行处理
-            MemberInfo member = javaContext.getMember(info.sign);
-            if (ObjectUtil.isNotNull(member)) {
-                info.usageInfo = member.usageInfo;
-                member.usageInfo.values().stream().forEach(usage -> usage.callInfo.put(info.sign, info));
-            }
-            
-            javaContext.add(info);
-            classInfo.memberInfo.put(info.sign, info);
+            parserCall(javaContext, classInfo, i, info);
+        }
+        List<MethodDeclaration> methodList = type.findAll(MethodDeclaration.class);
+        for (MethodDeclaration m: methodList) {
+            MemberInfo info = initInfo(classInfo);
+            info.memberType = MemberEnum.METHOD;
+            ResolvedMethodDeclaration r = m.resolve();
+            InfoUtils.addMethodInfo(info, r, m);
+            InfoUtils.forGetSet(info, type, rt);
+    
             parserCall(javaContext, classInfo, m, info);
         }
     }
     
     /**
+     * 初始化
+     */
+    private static MemberInfo initInfo(TypeInfo classInfo) {
+        MemberInfo info = BeanUtil.copyProperties(classInfo, MemberInfo.class);
+        info.classInfo = classInfo;
+        return info;
+    }
+    
+    /**
      * 解析调用方
      */
-    private static void parserCall(JavaContext javaContext, TypeInfo classInfo, BodyDeclaration<?> m, MemberInfo info) {
+    private static void parserCall(JavaContext javaContext, TypeInfo classInfo,
+                                   BodyDeclaration<?> m, MemberInfo info) {
+        MemberInfo member = javaContext.getMember(info.sign);
+        if (ObjectUtil.isNotNull(member)) {
+            info.usageInfo = member.usageInfo;
+            member.usageInfo.values().forEach(usage -> usage.callInfo.put(info.sign, info));
+        }
+    
+        javaContext.add(info);
+        classInfo.memberInfo.put(info.sign, info);
+        
         if (MemberEnum.isMethod(info.memberType)) {
             MethodCallResolver.parseMethodCall(javaContext, m, classInfo, info);
         }

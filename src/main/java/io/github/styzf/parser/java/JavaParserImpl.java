@@ -56,6 +56,7 @@ public class JavaParserImpl extends AbstractFileParser {
     @Override
     public FileParser parser(File... files) {
         FileUtils.deep(this::parseFile, this::filterFile, files);
+        StaticOverResolver.parseRel();
         StaticOverResolver.parseOver(JAVA_CONTEXT);
         return this;
     }

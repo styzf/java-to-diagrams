@@ -15,7 +15,6 @@ import java.util.regex.Pattern;
  * @author styzf
  * @date 2021/12/15 20:15
  */
-@EqualsAndHashCode(callSuper = true)
 @Slf4j
 @Data
 public class JavaInfo extends ModifiersInfo {
